@@ -1,0 +1,20 @@
+﻿<Window x:Class="WpfBlackJack.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfBlackJack"
+        mc:Ignorable="d"
+        Title="BlackJack">
+    <Grid x:Name="MainGrid">
+        <Button x:Name="btnStartOver" Content="Start Over" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Click="BtnStartOver_Click" Height="40" Width="70"/>
+        <Button x:Name="btnHitMe" Content="Hit Me" HorizontalAlignment="Right" Margin="0,55,10,0" VerticalAlignment="Top" Click="BtnHitMe_Click" Height="40" Width="70"/>
+        <Button x:Name="btnStand" Content="Stand" HorizontalAlignment="Right" Margin="0,100,10,0" VerticalAlignment="Top" Click="BtnStand_Click" Height="40" Width="70"/>
+        <WrapPanel x:Name="wpPlayers" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,150,0,0"/>
+        <!--<Grid>
+                <Image Stretch="None" Source="resources/c2.gif" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBlock Text="This is some text" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,120,0,0"/>
+            </Grid>-->
+
+    </Grid>
+</Window>
