@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Collections.Generic;
 
 namespace jackel.Cards
@@ -16,18 +15,16 @@ namespace jackel.Cards
         public BlackJack(int players = 1)
         {
             numPlayers = players;
-            Debug.WriteLine($"BlackJack() : {numPlayers} players");
             hands = new Deck[numPlayers + 1];
-
-            pile = new Deck("Pile", false, true, true); // get a full deck of cards
+            pile = new Deck("Pile", hasJokers: false, withCards: true, useStaticCards: true); // get a full deck of cards
 
             for (int i = 0; i <= numPlayers; i++)
             {
                 if (i == 0)
-                    hands[i] = new Deck("House", false, false);
+                    hands[i] = new Deck("House", hasJokers: false, withCards: false);
                 else
-                    hands[i] = new Deck($"Player {i.ToString()}", false, false);
-                hands[i].EvCalculate += BJCalculate;
+                    hands[i] = new Deck($"Player {i.ToString()}", hasJokers: false, withCards: false);
+                hands[i].EvCalculate += BJCalculate; // Use BlackJack calculation for card/hand values
             }
         }
         public int NumPileCards => pile.Count;
@@ -87,7 +84,10 @@ namespace jackel.Cards
         {
             CollectCards();
             pile.Shuffle();
-            Debug.Assert(pile.IsPristine, "Pile is not pristine and should be");
+            if (!pile.IsPristine)
+            {
+                throw new InvalidOperationException("Pile is not pristine and should be");
+            }
             for (int i = 0; i < 2; i++) // deal two cards per player
                 foreach (Deck d in hands)
                 {
@@ -96,7 +96,6 @@ namespace jackel.Cards
                         p.faceUp = true;
                 }
         }
-        public void DumpPile() => Console.WriteLine(pile);
         public void SortPile() => pile.Sort();
         public Deck ClonePile() => (Deck)pile.Clone();
         public PlayingCard Peek(int Player) => Player <= numPlayers ? hands[Player].Peek(1) : null;

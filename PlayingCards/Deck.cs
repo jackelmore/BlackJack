@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Diagnostics;
 using System.Text;
 
 namespace jackel.Cards
@@ -14,11 +13,11 @@ namespace jackel.Cards
         [DataMember]
         private List<PlayingCard> cards = new List<PlayingCard>();
         [DataMember]
-        private bool _jokers;
+        private bool AllowJokers;
         [DataMember]
         public int TotalValue { get; set; }
         [DataMember]
-        private Guid guid = Guid.NewGuid();
+        private readonly Guid DeckGUID = Guid.NewGuid();
         [DataMember]
         public string DeckName { get; set; }
         public bool IsEmpty => (cards.Count == 0);
@@ -29,12 +28,12 @@ namespace jackel.Cards
         protected virtual void OnCombine() => EvCombine?.Invoke(this, EventArgs.Empty);
         protected virtual void OnCalculate() => EvCalculate?.Invoke(this, EventArgs.Empty);
 
-        private static List<PlayingCard> defaultCards = new List<PlayingCard>();
+        private readonly static List<PlayingCard> defaultCards = new List<PlayingCard>();
         private Random rand = new Random();
 
         static Deck() // Create the single set of cards that all other decks reference.
         {
-            for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax; s++)
+            for (int s = PlayingCard.cardNumMin; s <= PlayingCard.jokerNum; s++)
                 defaultCards.Add(new PlayingCard(s));
             defaultCards.Add(new PlayingCard(PlayingCard.jokerNum)); // add the second joker
         }
@@ -43,7 +42,7 @@ namespace jackel.Cards
             foreach (PlayingCard p in defaultCards)
             {
                 if (p.IsJoker())
-                    if (_jokers)
+                    if (AllowJokers)
                         cards.Add(p);
                     else
                         continue;
@@ -53,9 +52,9 @@ namespace jackel.Cards
         }
         private void AddDefaultCards()
         {
-            for (int s = PlayingCard.cardNumMin; s < PlayingCard.cardNumMax; s++)
+            for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax; s++)
                 cards.Add(new PlayingCard(s));
-            if (_jokers)
+            if (AllowJokers)
             {
                 cards.Add(new PlayingCard(PlayingCard.jokerNum));
                 cards.Add(new PlayingCard(PlayingCard.jokerNum));
@@ -64,8 +63,7 @@ namespace jackel.Cards
         public Deck(string name = "Unnamed", bool hasJokers = false, bool withCards = true, bool useStaticCards = true)
         {
             DeckName = name;
-            Debug.WriteLine($"Constructor: Deck {{{guid.ToString()}}}, deckName == {DeckName}");
-            _jokers = hasJokers;
+            AllowJokers = hasJokers;
             if (withCards)
             {
                 if (useStaticCards)
@@ -75,21 +73,21 @@ namespace jackel.Cards
                 OnCalculate();
             }
         }
-        public Deck() : this("Unnamed", true, false, true)
+        public Deck() : this(name: "Unnamed", hasJokers: true, withCards: false, useStaticCards: true)
         { }
 
         public bool IsPristine
         {
             get
             {
-                if (cards.Count != (_jokers ? 54 : 52))
+                if (cards.Count != (AllowJokers ? 54 : 52))
                     return false;
-                for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax - 1; s++) // check without jokers first
+                for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax; s++) // check without jokers first
                 {
                     if (!cards.Exists(x => x.CardInt == s))
                         return false;
                 }
-                if (_jokers)
+                if (AllowJokers)
                     if (cards.FindAll(x => x.CardInt == PlayingCard.jokerNum).Count != 2)
                         return false;
                 return true;
@@ -144,7 +142,6 @@ namespace jackel.Cards
             }
             return p;
         }
-
         public bool Remove(PlayingCard p)
         {
             if (p != null)
@@ -156,7 +153,6 @@ namespace jackel.Cards
             }
             return false;
         }
-
         public IEnumerator<PlayingCard> GetEnumerator() => cards.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
         public void Shuffle()
@@ -282,17 +278,15 @@ namespace jackel.Cards
         /// <returns></returns>
         public object Clone()
         {
-            Deck newDeck = new Deck(DeckName, _jokers, false); // new empty deck
-            newDeck.EvCalculate = EvCalculate;
-            newDeck.EvDraw = EvDraw;
-            newDeck.EvCombine = EvCombine;
+            Deck newDeck = new Deck(name: DeckName, hasJokers: AllowJokers, withCards: false)
+            {
+                EvCalculate = EvCalculate,
+                EvDraw = EvDraw,
+                EvCombine = EvCombine
+            }; // new empty deck
             newDeck.cards.AddRange(cards);
             newDeck.OnCalculate();
             return newDeck;
-        }
-        ~Deck()
-        {
-            Debug.WriteLine($"Finalizer:   Deck {DeckName}, {{{guid.ToString()}}}");
         }
     }
 }

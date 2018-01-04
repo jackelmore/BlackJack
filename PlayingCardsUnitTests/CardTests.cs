@@ -10,7 +10,7 @@ namespace UnitTests
     {
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void CardNumTooHigh() => new PlayingCard(PlayingCard.cardNumMax + 1);    // cardnum too high
+        public void CardNumTooHigh() => new PlayingCard(PlayingCard.jokerNum + 1);    // cardnum too high
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         public void CardNumTooLow() => new PlayingCard(PlayingCard.cardNumMin - 1);     // cardnum too low
@@ -96,8 +96,8 @@ namespace UnitTests
             Assert.IsTrue(joker2.IsValid());
             Assert.IsTrue(joker3.IsValid());
             Assert.IsFalse(PlayingCard.IsValid(-100));
-            Assert.IsFalse(PlayingCard.IsValid(PlayingCard.cardNumMin - 1));
-            Assert.IsFalse(PlayingCard.IsValid(PlayingCard.cardNumMax + 1));
+            Assert.IsFalse(PlayingCard.IsValid(PlayingCard.cardNumMin - 1)); // lower bound
+            Assert.IsFalse(PlayingCard.IsValid(PlayingCard.jokerNum + 1)); // upper bound
 
             // Comparison Tests
             Assert.IsTrue(p1.CompareTo((object)p2) < 0);

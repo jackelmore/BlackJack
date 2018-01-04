@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Xml;
-using System.Diagnostics;
 
 namespace jackel.Cards
 {
@@ -13,14 +12,14 @@ namespace jackel.Cards
     public class PlayingCard : ICloneable, IEquatable<PlayingCard>, IComparable<PlayingCard>, IComparable
     {
         public const int cardNumMin = 1;
-        public const int cardNumMax = cardNumMin + 52;
-        public const int jokerNum = cardNumMax;
+        public const int cardNumMax = 52;
+        public const int jokerNum = 53;
         static Random rand = new Random();
 
         [DataMember]
         private int cardNumber;
         [DataMember]
-        public Guid CardGUID { get; }
+        public readonly Guid CardGUID = Guid.NewGuid();
         [DataMember]
         public bool faceUp = false;
 
@@ -28,13 +27,13 @@ namespace jackel.Cards
         {
             int number;
             if (includeJokers)
-                number = rand.Next(cardNumMin, cardNumMax + 1);
+                number = rand.Next(cardNumMin, jokerNum + 1); // exclusive upper bound
             else
-                number = rand.Next(cardNumMin, cardNumMax);
+                number = rand.Next(cardNumMin, cardNumMax + 1); // exclusive upper bound
             return new PlayingCard(number);
         }
 
-        public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= cardNumMax)) ? true : false;
+        public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= jokerNum)) ? true : false;
         public int CardInt => cardNumber;
         public int RankAsInt => (int)Rank + 1;
 
@@ -91,7 +90,6 @@ namespace jackel.Cards
                 throw new InvalidOperationException($"PlayingCard: Constructor cannot create invalid card #{cardNum}");
             else
             {
-                CardGUID = Guid.NewGuid();
                 cardNumber = cardNum;
             }
         }
@@ -126,7 +124,6 @@ namespace jackel.Cards
                     return Suit.ToString().Substring(0, 1) + Rank.ToString().Substring(0, 1); // "HT" == Ten of Hearts, "HA" == Ace of Hearts
             }
         }
-
         public object Clone() => new PlayingCard(cardNumber);
         public override bool Equals(object obj)
         {
@@ -147,10 +144,5 @@ namespace jackel.Cards
         public static bool operator >(PlayingCard p1, PlayingCard p2) => p1.cardNumber > p2.cardNumber;
         public static bool operator <(PlayingCard p1, PlayingCard p2) => p1.cardNumber < p2.cardNumber;
         public override int GetHashCode() => cardNumber;
-        ~PlayingCard()
-        {
-            if (IsValid())
-                Debug.WriteLine($"Finalizer:   {this}");
-        }
     }
 }
