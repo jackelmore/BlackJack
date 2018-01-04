@@ -34,6 +34,7 @@ namespace jackel.Cards
         }
 
         public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= jokerNum)) ? true : false;
+        public bool IsValid() => IsValid(cardNumber);
         public int CardInt => cardNumber;
         public int RankAsInt => (int)Rank + 1;
 
@@ -51,8 +52,6 @@ namespace jackel.Cards
                 return ((((int)suit - 1) * 13) + (int)rank);
         }
         public Tuple<Suits, Ranks> SuitAndRank => new Tuple<Suits, Ranks>(Suit, Rank);
-
-        public bool IsValid() => IsValid(cardNumber);
 
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1

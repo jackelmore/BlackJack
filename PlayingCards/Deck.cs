@@ -11,7 +11,7 @@ namespace jackel.Cards
     public class Deck : ICloneable, IEnumerable<PlayingCard>
     {
         [DataMember]
-        private List<PlayingCard> cards = new List<PlayingCard>();
+        private readonly List<PlayingCard> cards = new List<PlayingCard>();
         [DataMember]
         private bool AllowJokers;
         [DataMember]
@@ -53,7 +53,9 @@ namespace jackel.Cards
         private void AddDefaultCards()
         {
             for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax; s++)
+            {
                 cards.Add(new PlayingCard(s));
+            }
             if (AllowJokers)
             {
                 cards.Add(new PlayingCard(PlayingCard.jokerNum));
@@ -73,8 +75,8 @@ namespace jackel.Cards
                 OnCalculate();
             }
         }
-        public Deck() : this(name: "Unnamed", hasJokers: true, withCards: false, useStaticCards: true)
-        { }
+        //public Deck() : this(name: "Unnamed", hasJokers: false, withCards: true, useStaticCards: true)
+        //{ }
 
         public bool IsPristine
         {
@@ -82,9 +84,9 @@ namespace jackel.Cards
             {
                 if (cards.Count != (AllowJokers ? 54 : 52))
                     return false;
-                for (int s = PlayingCard.cardNumMin; s <= PlayingCard.cardNumMax; s++) // check without jokers first
+                for (int cardNum = PlayingCard.cardNumMin; cardNum <= PlayingCard.cardNumMax; cardNum++) // check without jokers first
                 {
-                    if (!cards.Exists(x => x.CardInt == s))
+                    if (!cards.Exists(x => x.CardInt == cardNum))
                         return false;
                 }
                 if (AllowJokers)
