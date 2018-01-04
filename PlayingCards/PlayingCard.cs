@@ -118,7 +118,7 @@ namespace jackel.Cards
             {
                 if (IsJoker())
                     return "J";
-                else if ((int)Rank < (int)Ranks.Ten)
+                else if ((int)Rank <= (int)Ranks.Nine)
                     return Suit.ToString().Substring(0, 1) + (RankAsInt).ToString(); // "H2" == Two of Hearts
                 else
                     return Suit.ToString().Substring(0, 1) + Rank.ToString().Substring(0, 1); // "HT" == Ten of Hearts, "HA" == Ace of Hearts
