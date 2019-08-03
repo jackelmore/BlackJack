@@ -9,8 +9,8 @@ namespace jackel.Cards
         public const int houseHand = 0;
         public const int maxHandValue = 21;
         public readonly int numPlayers;
-        private Deck pile;
-        private Deck[] hands;
+        private readonly Deck pile;
+        private readonly Deck[] hands;
 
         public BlackJack(int players = 1)
         {

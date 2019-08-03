@@ -1,26 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
-using System.Xml;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace jackel.Cards
 {
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class Deck : ICloneable, IEnumerable<PlayingCard>
     {
-        [DataMember]
+        [JsonProperty]
         private readonly List<PlayingCard> cards = new List<PlayingCard>();
-        [DataMember]
+        [JsonProperty]
         private bool AllowJokers;
-        [DataMember]
         public int TotalValue { get; set; }
-        [DataMember]
+        [JsonProperty]
         private readonly Guid DeckGUID = Guid.NewGuid();
-        [DataMember]
+        [JsonProperty]
         public string DeckName { get; set; }
+        [JsonProperty]
         public bool IsEmpty => (cards.Count == 0);
+        [JsonProperty]
         public int Count => cards.Count;
 
         public event EventHandler EvDraw, EvCombine, EvCalculate;
@@ -75,8 +75,8 @@ namespace jackel.Cards
                 OnCalculate();
             }
         }
-        //public Deck() : this(name: "Unnamed", hasJokers: false, withCards: true, useStaticCards: true)
-        //{ }
+        public Deck() : this(name: "Unnamed", hasJokers: false, withCards: true, useStaticCards: true)
+        { }
 
         public bool IsPristine
         {
@@ -95,12 +95,9 @@ namespace jackel.Cards
                 return true;
             }
         }
-        public void ToXmlFile(string filename)
+        public string ToXmlString()
         {
-            var ds = new DataContractSerializer(typeof(Deck));
-            XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
-            using (XmlWriter w = XmlWriter.Create(filename, settings))
-                ds.WriteObject(w, this);
+            return JsonConvert.DeserializeXNode(this.ToJsonString(), nameof(Deck)).ToString();
         }
         public void SetAllFaceUp(bool isFaceUp)
         {
@@ -254,6 +251,7 @@ namespace jackel.Cards
             }
             return sb.ToString();
         }
+        public string ToJsonString() => JsonConvert.SerializeObject(this);
         /// <summary>
         /// This function REMOVES the cards from d2. All combined cards end up in d1 and d2's card List is cleared.
         /// </summary>

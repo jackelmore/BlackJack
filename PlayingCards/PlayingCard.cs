@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Runtime.Serialization;
-using System.Xml;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace jackel.Cards
 {
@@ -8,7 +8,7 @@ namespace jackel.Cards
     public enum Ranks { Two = 1, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King, Ace, Joker };
     public enum Colors { Red, Black };
 
-    [DataContract]
+    [JsonObject(MemberSerialization.OptIn)]
     public class PlayingCard : ICloneable, IEquatable<PlayingCard>, IComparable<PlayingCard>, IComparable
     {
         public const int cardNumMin = 1;
@@ -16,11 +16,10 @@ namespace jackel.Cards
         public const int jokerNum = 53;
         static Random rand = new Random();
 
-        [DataMember]
         private int cardNumber;
-        [DataMember]
+        [JsonProperty]
         public readonly Guid CardGUID = Guid.NewGuid();
-        [DataMember]
+        [JsonProperty]
         public bool faceUp = false;
 
         public static PlayingCard MakeRandomCard(bool includeJokers = false)
@@ -35,6 +34,7 @@ namespace jackel.Cards
 
         public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= jokerNum)) ? true : false;
         public bool IsValid() => IsValid(cardNumber);
+        [JsonProperty]
         public int CardInt => cardNumber;
         public int RankAsInt => (int)Rank + 1;
 
@@ -56,12 +56,13 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Ranks Rank
         {
             get
             {
                 if (!IsValid(CardInt))
-                    throw new InvalidOperationException($"GetCardRank: Invalid cardInt value {CardInt}");
+                    throw new InvalidOperationException($"GetCardRank: Invalid cardInt value {CardInt}, GUID {CardGUID}");
                 if (CardInt == jokerNum)
                     return Ranks.Joker;
                 else
@@ -71,12 +72,13 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
+        [JsonConverter(typeof(StringEnumConverter))]
         public Suits Suit
         {
             get
             {
                 if (!IsValid(CardInt))
-                    throw new InvalidOperationException($"GetCardSuit: Invalid cardInt value {CardInt}");
+                    throw new InvalidOperationException($"GetCardSuit: Invalid cardInt value {CardInt}, GUID {CardGUID}");
                 if (CardInt == jokerNum)
                     return Suits.Joker;
                 else
@@ -94,7 +96,8 @@ namespace jackel.Cards
         }
         public PlayingCard(Suits suit, Ranks rank) : this(GetCardInt(suit, rank))
         { }
-        private PlayingCard() { } // no default constructor
+        public PlayingCard() : this(Suits.Joker, Ranks.Joker)
+        { }
         public void Deconstruct(out Suits s, out Ranks r)
         {
             s = Suit;
@@ -102,15 +105,15 @@ namespace jackel.Cards
         }
         public Colors Color => ((Suit == Suits.Diamonds) || (Suit == Suits.Hearts)) ? Colors.Red : Colors.Black;
         public bool IsJoker() => (cardNumber == jokerNum);
-        public void ToXmlFile(string filename)
-        {
-            var ds = new DataContractSerializer(typeof(PlayingCard));
-            XmlWriterSettings settings = new XmlWriterSettings() { Indent = true };
-            using (XmlWriter w = XmlWriter.Create(filename, settings))
-                ds.WriteObject(w, this);
-        }
         public string LongName => string.Format("     {0,2}({1,2}): {2,17}, {3,5}, {4,9}, {5}", ShortName, cardNumber, Rank.ToString() + " of " + Suit.ToString(), Color.ToString(), faceUp ? "Face Up" : "Face Down", CardGUID);
         public override string ToString() => LongName;
+        public string ToJsonString() => JsonConvert.SerializeObject(this);
+        public string ToXmlString()
+        {
+            //System.Xml.Linq.XNode node = JsonConvert.DeserializeXNode(this.ToJsonString(), "Root");
+            //return node.ToString();
+            return JsonConvert.DeserializeXNode(this.ToJsonString(), nameof(PlayingCard)).ToString();
+        }
         public string ShortName
         {
             get
@@ -137,7 +140,8 @@ namespace jackel.Cards
         public int CompareTo(PlayingCard other) => (cardNumber - other.cardNumber);
         public int CompareTo(object obj)
         {
-            if (!(obj is PlayingCard)) throw new InvalidOperationException("CompareTo: Not a PlayingCard");
+            if (!(obj is PlayingCard))
+                throw new InvalidOperationException("CompareTo: Not a PlayingCard");
             return CompareTo((PlayingCard)obj);
         }
         public static bool operator >(PlayingCard p1, PlayingCard p2) => p1.cardNumber > p2.cardNumber;
