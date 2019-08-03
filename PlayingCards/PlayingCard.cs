@@ -14,9 +14,9 @@ namespace jackel.Cards
         public const int cardNumMin = 1;
         public const int cardNumMax = 52;
         public const int jokerNum = 53;
-        static Random rand = new Random();
-
+        private static readonly Random rand = new Random();
         private int cardNumber;
+
         [JsonProperty]
         public readonly Guid CardGUID = Guid.NewGuid();
         [JsonProperty]
@@ -56,8 +56,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
-        [JsonProperty]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
         public Ranks Rank
         {
             get
@@ -73,8 +72,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
-        [JsonProperty]
-        [JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
         public Suits Suit
         {
             get
@@ -110,12 +108,8 @@ namespace jackel.Cards
         public string LongName => string.Format("     {0,2}({1,2}): {2,17}, {3,5}, {4,9}, {5}", ShortName, cardNumber, Rank.ToString() + " of " + Suit.ToString(), Color.ToString(), faceUp ? "Face Up" : "Face Down", CardGUID);
         public override string ToString() => LongName;
         public string ToJsonString() => JsonConvert.SerializeObject(this);
-        public string ToXmlString()
-        {
-            //System.Xml.Linq.XNode node = JsonConvert.DeserializeXNode(this.ToJsonString(), "Root");
-            //return node.ToString();
-            return JsonConvert.DeserializeXNode(this.ToJsonString(), nameof(PlayingCard)).ToString();
-        }
+        public string ToXmlString() => JsonConvert.DeserializeXNode(this.ToJsonString(), nameof(PlayingCard)).ToString();
+
         public string ShortName
         {
             get
