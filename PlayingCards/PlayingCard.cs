@@ -56,6 +56,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
+        [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public Ranks Rank
         {
@@ -72,6 +73,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
+        [JsonProperty]
         [JsonConverter(typeof(StringEnumConverter))]
         public Suits Suit
         {
