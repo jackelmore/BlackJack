@@ -66,5 +66,11 @@ namespace UnitTests
             Assert.IsTrue(d1.Count == 0);
             Assert.IsTrue(d3.Count == 108);
         }
+        [TestMethod]
+
+        public void JSONSerialize()
+        {
+            Console.WriteLine(new Deck().ToJsonString());
+        }
     }
 }

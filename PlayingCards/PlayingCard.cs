@@ -17,9 +17,9 @@ namespace jackel.Cards
         private static readonly Random rand = new Random();
         private int cardNumber;
 
-        [JsonProperty]
+        [JsonProperty(Order=10)]
         public readonly Guid CardGUID = Guid.NewGuid();
-        [JsonProperty]
+        [JsonProperty(Order=5)]
         public bool faceUp = false;
 
         public static PlayingCard MakeRandomCard(bool includeJokers = false)
@@ -34,8 +34,9 @@ namespace jackel.Cards
 
         public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= jokerNum)) ? true : false;
         public bool IsValid() => IsValid(cardNumber);
-        [JsonProperty]
+        [JsonProperty(Order=8)]
         public int CardInt => cardNumber;
+        [JsonProperty(Order=6)]
         public int RankAsInt => (int)Rank + 1;
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
-        [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty(Order=1), JsonConverter(typeof(StringEnumConverter))]
         public Ranks Rank
         {
             get
@@ -72,7 +73,7 @@ namespace jackel.Cards
         /// <summary>
         /// Volatile - Assumes cardInt, Suits enum, and Ranks enum all start at Integer value 1
         /// </summary>
-        [JsonProperty, JsonConverter(typeof(StringEnumConverter))]
+        [JsonProperty(Order=2), JsonConverter(typeof(StringEnumConverter))]
         public Suits Suit
         {
             get
@@ -103,18 +104,22 @@ namespace jackel.Cards
             s = Suit;
             r = Rank;
         }
+        [JsonProperty(Order=3), JsonConverter(typeof(StringEnumConverter))]
         public Colors Color => ((Suit == Suits.Diamonds) || (Suit == Suits.Hearts)) ? Colors.Red : Colors.Black;
-        public bool IsJoker() => (cardNumber == jokerNum);
+        [JsonProperty(Order=4)]
+        public bool IsJoker => (cardNumber == jokerNum);
+        [JsonProperty(Order=9)]
         public string LongName => string.Format("     {0,2}({1,2}): {2,17}, {3,5}, {4,9}, {5}", ShortName, cardNumber, Rank.ToString() + " of " + Suit.ToString(), Color.ToString(), faceUp ? "Face Up" : "Face Down", CardGUID);
         public override string ToString() => LongName;
         public string ToJsonString() => JsonConvert.SerializeObject(this);
         public string ToXmlString() => JsonConvert.DeserializeXNode(this.ToJsonString(), nameof(PlayingCard)).ToString();
 
+        [JsonProperty(Order=7)]
         public string ShortName
         {
             get
             {
-                if (IsJoker())
+                if (IsJoker)
                     return "J";
                 else if ((int)Rank <= (int)Ranks.Nine)
                     return Suit.ToString().Substring(0, 1) + (RankAsInt).ToString(); // "H2" == Two of Hearts

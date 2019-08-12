@@ -9,18 +9,18 @@ namespace jackel.Cards
     [JsonObject(MemberSerialization.OptIn)]
     public class Deck : ICloneable, IEnumerable<PlayingCard>
     {
-        [JsonProperty]
+        [JsonProperty(Order=6)]
         private readonly List<PlayingCard> cards = new List<PlayingCard>();
-        [JsonProperty]
+        [JsonProperty(Order=3)]
         private bool AllowJokers;
         public int TotalValue { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order=4)]
         private readonly Guid DeckGUID = Guid.NewGuid();
-        [JsonProperty]
+        [JsonProperty(Order=1)]
         public string DeckName { get; set; }
-        [JsonProperty]
+        [JsonProperty(Order=2)]
         public bool IsEmpty => (cards.Count == 0);
-        [JsonProperty]
+        [JsonProperty(Order=5)]
         public int Count => cards.Count;
 
         public event EventHandler EvDraw, EvCombine, EvCalculate;
@@ -41,7 +41,7 @@ namespace jackel.Cards
         {
             foreach (PlayingCard p in defaultCards)
             {
-                if (p.IsJoker())
+                if (p.IsJoker)
                     if (AllowJokers)
                         cards.Add(p);
                     else

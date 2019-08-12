@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using jackel.Cards;
+using Newtonsoft.Json;
 
 namespace UnitTests
 {
@@ -61,6 +62,11 @@ namespace UnitTests
             Assert.IsFalse(joker.Color != Colors.Black);
         }
         [TestMethod]
+        public void JSONSerialize()
+        {
+            Console.WriteLine(PlayingCard.MakeRandomCard(includeJokers: true).ToJsonString());
+        }
+        [TestMethod]
         public void ComparisonEquality()
         {
             PlayingCard p1 = new PlayingCard(2);
@@ -118,12 +124,12 @@ namespace UnitTests
             Assert.IsTrue(p1 != p3);
 
             // Joker Tests
-            Assert.IsFalse(p1.IsJoker());
-            Assert.IsFalse(p2.IsJoker());
-            Assert.IsFalse(p3.IsJoker());
-            Assert.IsTrue(joker1.IsJoker());
-            Assert.IsTrue(joker2.IsJoker());
-            Assert.IsTrue(joker3.IsJoker());
+            Assert.IsFalse(p1.IsJoker);
+            Assert.IsFalse(p2.IsJoker);
+            Assert.IsFalse(p3.IsJoker);
+            Assert.IsTrue(joker1.IsJoker);
+            Assert.IsTrue(joker2.IsJoker);
+            Assert.IsTrue(joker3.IsJoker);
 
             // Random Card Test
             for (int i = 1; i < 100; i++)
