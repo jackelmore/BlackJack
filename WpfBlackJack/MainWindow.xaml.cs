@@ -22,9 +22,9 @@ namespace WpfBlackJack
     public partial class MainWindow : Window
     {
         const double leftBuffer = 10, topBuffer = 10;
-        double fontSize = 16;
-        double cardHeight = Properties.Resources.B.Height;
-        double cardWidth = Properties.Resources.B.Width;
+        readonly double fontSize = 16;
+        readonly double cardHeight = Properties.Resources.B.Height;
+        readonly double cardWidth = Properties.Resources.B.Width;
         int currentPlayer;
         Border border;
 
