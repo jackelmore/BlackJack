@@ -1,17 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29123.88
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBlackJack", "WpfBlackJack\WpfBlackJack.csproj", "{75494194-638A-469F-A8B9-639B24123103}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleBlackJack", "ConsoleBlackJack\ConsoleBlackJack.csproj", "{36FAD19A-2B43-4443-AE9D-5C466B60F33C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayingCards", "PlayingCards\PlayingCards.csproj", "{0C63A326-726D-4BDA-9FBD-E497EA2DA704}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlayingCardsUnitTests", "PlayingCardsUnitTests\PlayingCardsUnitTests.csproj", "{4961D1C2-A1F2-4CCB-880C-FA08B08B5121}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfBlackJackCore", "WpfBlackJackCore\WpfBlackJackCore.csproj", "{53DBB952-C000-4295-A8A1-716498242DE3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfBlackJackCore", "WpfBlackJackCore\WpfBlackJackCore.csproj", "{53DBB952-C000-4295-A8A1-716498242DE3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{75494194-638A-469F-A8B9-639B24123103}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75494194-638A-469F-A8B9-639B24123103}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75494194-638A-469F-A8B9-639B24123103}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75494194-638A-469F-A8B9-639B24123103}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36FAD19A-2B43-4443-AE9D-5C466B60F33C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{36FAD19A-2B43-4443-AE9D-5C466B60F33C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36FAD19A-2B43-4443-AE9D-5C466B60F33C}.Release|Any CPU.ActiveCfg = Release|Any CPU
