@@ -15,7 +15,7 @@ namespace jackel.Cards
         public const int cardNumMax = 52;
         public const int jokerNum = 53;
         private static readonly Random rand = new Random();
-        private int cardNumber;
+        private readonly int cardNumber;
 
         [JsonProperty(Order=10)]
         public readonly Guid CardGUID = Guid.NewGuid();
@@ -32,7 +32,11 @@ namespace jackel.Cards
             return new PlayingCard(number);
         }
 
-        public static bool IsValid(int cardNum) => ((cardNum >= cardNumMin) && (cardNum <= jokerNum)) ? true : false;
+        public static bool IsValid(int cardNum)
+        {
+            bool v = ((cardNum >= cardNumMin) && (cardNum <= jokerNum));
+            return v;
+        }
         public bool IsValid() => IsValid(cardNumber);
         [JsonProperty(Order=8)]
         public int CardInt => cardNumber;
@@ -50,7 +54,10 @@ namespace jackel.Cards
             if ((suit == Suits.Joker) || (rank == Ranks.Joker))
                 return jokerNum;
             else
-                return ((((int)suit - 1) * 13) + (int)rank);
+            {
+                int v = ((((int)suit - 1) * 13) + (int)rank);
+                return v;
+            }
         }
         public Tuple<Suits, Ranks> SuitAndRank => new Tuple<Suits, Ranks>(Suit, Rank);
 

@@ -23,7 +23,7 @@ namespace jackel.Cards
                 if (i == 0)
                     hands[i] = new Deck("House", hasJokers: false, withCards: false);
                 else
-                    hands[i] = new Deck($"Player {i.ToString()}", hasJokers: false, withCards: false);
+                    hands[i] = new Deck(name: $"Player {i}", hasJokers: false, withCards: false);
                 hands[i].EvCalculate += BJCalculate; // Use BlackJack calculation for card/hand values
             }
         }

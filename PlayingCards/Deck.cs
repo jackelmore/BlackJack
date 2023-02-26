@@ -12,7 +12,7 @@ namespace jackel.Cards
         [JsonProperty(Order=6)]
         private readonly List<PlayingCard> cards = new List<PlayingCard>();
         [JsonProperty(Order=3)]
-        private bool AllowJokers;
+        private readonly bool AllowJokers;
         public int TotalValue { get; set; }
         [JsonProperty(Order=4)]
         private readonly Guid DeckGUID = Guid.NewGuid();
@@ -29,7 +29,7 @@ namespace jackel.Cards
         protected virtual void OnCalculate() => EvCalculate?.Invoke(this, EventArgs.Empty);
 
         private readonly static List<PlayingCard> defaultCards = new List<PlayingCard>();
-        private Random rand = new Random();
+        private readonly Random rand = new Random();
 
         static Deck() // Create the single set of cards that all other decks reference.
         {
@@ -232,7 +232,7 @@ namespace jackel.Cards
         public string SuitToString(Suits s)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append($"{DeckName}: Cards for Suit {s.ToString()}{Environment.NewLine}");
+            sb.Append($"{DeckName}: Cards for Suit {s}{Environment.NewLine}");
 
             foreach (PlayingCard p in cards)
             {

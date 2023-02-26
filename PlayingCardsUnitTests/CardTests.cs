@@ -33,9 +33,9 @@ namespace UnitTests
         [TestMethod]
         public void ShortName()
         {
-            PlayingCard twohearts = new PlayingCard(Suits.Hearts, Ranks.Two);
-            PlayingCard joker = new PlayingCard(Suits.Joker, Ranks.Joker);
-            PlayingCard queenclubs = new PlayingCard(Suits.Clubs, Ranks.Queen);
+            PlayingCard twohearts = new (Suits.Hearts, Ranks.Two);
+            PlayingCard joker = new (Suits.Joker, Ranks.Joker);
+            PlayingCard queenclubs = new (Suits.Clubs, Ranks.Queen);
 
             Assert.IsTrue(twohearts.ShortName == "H2");
             Assert.IsTrue(joker.ShortName == "J");
@@ -44,11 +44,11 @@ namespace UnitTests
         [TestMethod]
         public void CardColor()
         {
-            PlayingCard hearts = new PlayingCard(Suits.Hearts, Ranks.Two);
-            PlayingCard diamonds = new PlayingCard(Suits.Diamonds, Ranks.Ten);
-            PlayingCard clubs = new PlayingCard(Suits.Clubs, Ranks.Ace);
-            PlayingCard spades = new PlayingCard(Suits.Spades, Ranks.Eight);
-            PlayingCard joker = new PlayingCard(Suits.Joker, Ranks.Joker);
+            PlayingCard hearts = new (Suits.Hearts, Ranks.Two);
+            PlayingCard diamonds = new (Suits.Diamonds, Ranks.Ten);
+            PlayingCard clubs = new (Suits.Clubs, Ranks.Ace);
+            PlayingCard spades = new (Suits.Spades, Ranks.Eight);
+            PlayingCard joker = new (Suits.Joker, Ranks.Joker);
 
             Assert.IsTrue(hearts.Color == Colors.Red);
             Assert.IsFalse(hearts.Color != Colors.Red);
@@ -69,12 +69,12 @@ namespace UnitTests
         [TestMethod]
         public void ComparisonEquality()
         {
-            PlayingCard p1 = new PlayingCard(2);
-            PlayingCard p2 = new PlayingCard(52);
+            PlayingCard p1 = new (2);
+            PlayingCard p2 = new (52);
             PlayingCard p3 = (PlayingCard)p2.Clone();
-            PlayingCard joker1 = new PlayingCard(Suits.Joker, Ranks.Two);
-            PlayingCard joker2 = new PlayingCard(Suits.Hearts, Ranks.Joker);
-            PlayingCard joker3 = new PlayingCard(Suits.Joker, Ranks.Joker);
+            PlayingCard joker1 = new (Suits.Joker, Ranks.Two);
+            PlayingCard joker2 = new (Suits.Hearts, Ranks.Joker);
+            PlayingCard joker3 = new (Suits.Joker, Ranks.Joker);
 
             // Check Guids
             Assert.IsTrue(p1.CardGUID != p2.CardGUID);
@@ -138,7 +138,7 @@ namespace UnitTests
         [TestMethod]
         public void MakeEveryPossibleCard()
         {
-            List<PlayingCard> cardList = new List<PlayingCard>();
+            List<PlayingCard> cardList = new ();
             for (int i = PlayingCard.cardNumMin; i <= PlayingCard.cardNumMax; i++)
                 cardList.Add(new PlayingCard(i));
             Assert.IsTrue(cardList.Count == PlayingCard.cardNumMax);
@@ -150,8 +150,8 @@ namespace UnitTests
             {
                 for (int j = (int)Ranks.Two; j <= (int)Ranks.Ace; j++)
                 {
-                    PlayingCard p1 = new PlayingCard((Suits)i, (Ranks)j);
-                    PlayingCard p2 = new PlayingCard(p1.CardInt);
+                    PlayingCard p1 = new ((Suits)i, (Ranks)j);
+                    PlayingCard p2 = new (p1.CardInt);
                     Assert.IsTrue(p1.IsValid());
                     Assert.IsTrue(p2.IsValid());
                     Assert.IsTrue(p1.Equals(p2));
