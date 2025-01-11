@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -214,7 +215,13 @@ namespace WpfBlackJackCore
             if (p != null)
                 DisplayCards(currentPlayer);
             if (game.GetHandValue(currentPlayer) >= BlackJack.maxHandValue)
+            {
+                if (game.GetHandValue(currentPlayer) > BlackJack.maxHandValue)
+                {
+                    txtBlocks[currentPlayer].Text = $"{grids[currentPlayer].Name} ({game.GetHandValue(currentPlayer)}): BUST!";
+                }
                 NextPlayer();
+            }
         }
 
         private void BtnStartOver_Click(object sender, RoutedEventArgs e)
