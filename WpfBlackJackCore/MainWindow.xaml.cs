@@ -142,7 +142,8 @@ namespace WpfBlackJackCore
 
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
-            bi.UriSource = new Uri($"{RESOURCE_BASE_PATH}{resourceName}.gif");
+            string extension = resourceName.EndsWith(".gif") ? "" : ".gif";
+            bi.UriSource = new Uri($"{RESOURCE_BASE_PATH}{resourceName}{extension}");
             bi.EndInit();
             bi.Freeze();
             cardImageCache[resourceName] = bi;
